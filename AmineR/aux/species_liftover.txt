@@ -5,7 +5,7 @@ brmala	brugia_malayi	PRJNA10729
 brpaha	brugia_pahangi	PRJEB497
 brtimo	brugia_timori	PRJEB4663
 buxylo	bursaphelenchus_xylophilus	PRJEA64437
-caeleg	caenorhabditis_elegans	PRJNA13758
+ceeleg	caenorhabditis_elegans	PRJNA13758
 diimmi	dirofilaria_immitis	PRJEB1797
 drmedi	dracunculus_medinensis	PRJEB500
 elelap	elaeophora_elaphi	PRJEB502
