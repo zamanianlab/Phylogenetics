@@ -8,7 +8,7 @@ Every comparative genomics project should be encapsulated in a separate director
 
   1. Gene identification
       - This includes the entire pipeline for creating a filtered set of related genes.
-      - See `AmineR/get_homologues.R` and `AmineR/identification_pipeline.sh` for two examples. In the end, the `get_homologues.R` script, which uses WormBase ParaSite homology calls, was selected, but this may not be the best approach for every given gene family of interest (the ChemoR pipline used an HMM and BLAST approach, and this is what was initially used in `AmineR/identification_pipeline.sh` before switching to the WBP approach).
+      - See `AmineR/get_homologues.R` and `PPN_ChemoR/identification_pipeline.sh` for two examples, the first of which uses the WormBase ParaSite orthology calls and the REST API, and the second that uses seed sequences from *C. elegans* and a reciprocal HMM/BLAST approach.
   2. Alignment and tree-building
       - There are a number of potential alignment strategies, and these pipelines should be organized in a single script. The ChemoR pipeline first built a scaffold of HMMs using curated *C. elegans* sequences, and then it used MAFFT to sequentially add parasite genes to this scaffold. The AmineR pipeline trimmed sequences to only include transmembrane regions and aligned these.
       - The multiple sequence alignment probably needs to be trimmed (removing uninformative columns and gap-heavy sequences). This can be performed manually using an editor like Seaview, but it can also be done automatically with [trimal](http://trimal.cgenomics.org/). Note that the parameters used for trimming will need to be heuristically selected.
