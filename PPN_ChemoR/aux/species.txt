@@ -1,0 +1,15 @@
+globodera_rostochiensis/PRJEB13504/
+globodera_pallida/PRJEB123/
+meloidogyne_enterolobii/PRJNA340324/
+meloidogyne_arenaria/PRJNA438575
+meloidogyne_floridensis/PRJNA340324/
+meloidogyne_graminicola/PRJNA411966/
+meloidogyne_hapla/PRJNA29083/
+meloidogyne_incognita/PRJEB8714/
+meloidogyne_javanica/PRJNA340324/
+caenorhabditis_elegans/PRJNA13758/
+bursaphelenchus_xylophilus/PRJEA64437/
+heterodera_glycines/PRJNA381081/
+brugia_malayi/PRJNA10729/
+haemonchus_contortus/PRJEB506/
+romanomermis_culicivorax/PRJEB1358/
