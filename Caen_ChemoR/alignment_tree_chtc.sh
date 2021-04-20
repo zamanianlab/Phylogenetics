@@ -5,20 +5,20 @@ repo="Phylogenetics"
 proj="Caen_ChemoR"
 
 # for server
-gh_dir="$repo/$proj"
+gh_dir="$HOME/$repo/$proj"
 
 ## Species list
-species="$gh_dir/aux/species.txt"
+species="$HOME/$gh_dir/aux/species.txt"
 
-db="$proj/db"
-out="$proj/phylo"
+db="$HOME/$proj/db"
+out="$HOME/$proj/phylo"
 
 ## HMMTOP parsing script (filter based on TM range and produce sequences based on TM domains)
 # HMMTOP_py="${gh_dir}"/aux/scripts/HMMTOP_extract.py
-HMMTOP_strict_py="$gh_dir/aux/scripts/HMMTOP_extract_strict.py"
+HMMTOP_strict_py="$HOME/$gh_dir/aux/scripts/HMMTOP_extract_strict.py"
 
 ## misc
-linearize="$gh_dir/aux/scripts/linearizefasta.awk"
+linearize="$HOME/$gh_dir/aux/scripts/linearizefasta.awk"
 
 # count TM domains and extract TM-only sequences for anything with 3-10 TMs -----
 ## copy FASTA files to new directory
@@ -33,7 +33,7 @@ while IFS= read -r line; do
     array=($(echo "$line" | sed 's/\// /g'))
     species=${array[0]}
     cd $HOME/install/hmmtop_2.1/
-    hmmtop -if=$out/1/${species}_3.fa -of=$out/1/${species}_1_hmmtop.txt -sf=FAS
+    ./hmmtop -if=$out/1/${species}_3.fa -of=$out/1/${species}_1_hmmtop.txt -sf=FAS
     python $HMMTOP_strict_py $out/1/${species}_1_hmmtop.txt $out/1/${species}_3.fa $out/2/${species}_2.fa
   done;
 done <$species
@@ -67,7 +67,7 @@ awk -f $linearize < $out/3/caen_3.aln | sed '/^$/d' > $out/3/caen_3_linear.aln
 ### Get IDs and compare lists
 cat $out/3/caen_2_linear.aln | tr '\t' '\n' | awk 'NR%2==1' > $out/3/caen_2_ids.txt
 cat $out/3/caen_3_linear.aln | tr '\t' '\n' | awk 'NR%2==1' > $out/3/caen_3_ids.txt
-ggrep -v -f $out/3/caen_3_ids.txt $out/3/caen_2_ids.txt > $out/3/caen_3_filtered.txt
+grep -v -f $out/3/caen_3_ids.txt $out/3/caen_2_ids.txt > $out/3/caen_3_filtered.txt
 
 ### ML tree on server
 iqtree -s $out/3/caen_3.aln -nt 8 -alrt 1000 -bb 1000
