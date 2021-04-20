@@ -1,5 +1,3 @@
-#!/bin/python
-
 import collections
 from collections import Counter
 from sys import argv

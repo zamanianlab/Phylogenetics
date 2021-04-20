@@ -1,7 +1,3 @@
-#!/Users/njwheeler/software/miniconda3/bin/python
-
-import collections
-from collections import Counter
 from sys import argv
 import re
 from Bio import SeqIO
@@ -11,6 +7,7 @@ script, filename1, filename2, filename3 = argv
 p = open(filename1)  # HMMTOP output file
 record_dict = SeqIO.index(filename2, "fasta")  # FASTA file
 outfile = open(filename3, "w+")  # Filename for extracted sequences
+
 
 # keep the entire sequence if it has 3 < TM < 10
 def seqextract(file):

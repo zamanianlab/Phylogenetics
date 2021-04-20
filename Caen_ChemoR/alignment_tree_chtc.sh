@@ -13,6 +13,10 @@ species="$gh_dir/aux/species.txt"
 db="$proj/db"
 out="$proj/phylo"
 
+## HMMTOP env variables\
+HMMTOP_ARCH="$HOME/install/hmmtop_2.1/hmmtop.arch"
+HMMTOP_PSV="$HOME/install/hmmtop_2.1/hmmtop.psv"
+
 ## HMMTOP parsing script (filter based on TM range and produce sequences based on TM domains)
 # HMMTOP_py="${gh_dir}"/aux/scripts/HMMTOP_extract.py
 HMMTOP_strict_py="$gh_dir/aux/scripts/HMMTOP_extract_strict.py"
