@@ -13,10 +13,6 @@ species="$gh_dir/aux/species.txt"
 db="$proj/db"
 out="$proj/phylo"
 
-## HMMTOP env variables\
-HMMTOP_ARCH="$HOME/install/hmmtop_2.1/hmmtop.arch"
-HMMTOP_PSV="$HOME/install/hmmtop_2.1/hmmtop.psv"
-
 ## HMMTOP parsing script (filter based on TM range and produce sequences based on TM domains)
 # HMMTOP_py="${gh_dir}"/aux/scripts/HMMTOP_extract.py
 HMMTOP_strict_py="$gh_dir/aux/scripts/HMMTOP_extract_strict.py"
@@ -36,7 +32,7 @@ while IFS= read -r line; do
   for f in $db/$line/*.fa* ; do
     array=($(echo "$line" | sed 's/\// /g'))
     species=${array[0]}
-    # cd $gh_dir/aux/scripts/hmmtop_2.1/
+    cd $HOME/install/hmmtop_2.1/
     hmmtop -if=$out/1/${species}_3.fa -of=$out/1/${species}_1_hmmtop.txt -sf=FAS
     python $HMMTOP_strict_py $out/1/${species}_1_hmmtop.txt $out/1/${species}_3.fa $out/2/${species}_2.fa
   done;
