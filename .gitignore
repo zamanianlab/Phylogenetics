@@ -1,2 +1,4 @@
 PPN_ChemoR/aux/pfam_HMMs/
-**/*hmm*
+
+# any HMM files but not files containing hmm in the stem
+**/*\.hmm\.*
