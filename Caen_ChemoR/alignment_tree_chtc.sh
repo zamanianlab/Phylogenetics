@@ -8,7 +8,7 @@ proj="Caen_ChemoR"
 gh_dir="$HOME/$repo/$proj"
 
 ## Species list
-species="$HOME/$gh_dir/aux/species.txt"
+species="$gh_dir/aux/species.txt"
 
 db="$HOME/$proj/db"
 out="$HOME/$proj/phylo"
