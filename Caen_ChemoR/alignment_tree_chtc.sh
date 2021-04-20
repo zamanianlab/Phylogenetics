@@ -15,10 +15,10 @@ out="$HOME/$proj/phylo"
 
 ## HMMTOP parsing script (filter based on TM range and produce sequences based on TM domains)
 # HMMTOP_py="${gh_dir}"/aux/scripts/HMMTOP_extract.py
-HMMTOP_strict_py="$HOME/$gh_dir/aux/scripts/HMMTOP_extract_strict.py"
+HMMTOP_strict_py="$gh_dir/aux/scripts/HMMTOP_extract_strict.py"
 
 ## misc
-linearize="$HOME/$gh_dir/aux/scripts/linearizefasta.awk"
+linearize="$gh_dir/aux/scripts/linearizefasta.awk"
 
 # count TM domains and extract TM-only sequences for anything with 3-10 TMs -----
 ## copy FASTA files to new directory
@@ -44,7 +44,7 @@ for f in $out/2/*_2.fa; do
 done
 
 ### Remove Ce
-rm $out/2/caen*_label.fa
+rm $out/2/c_elegans_2_label.fa
 
 # concatenate and align --------------------------------------------------------
 
