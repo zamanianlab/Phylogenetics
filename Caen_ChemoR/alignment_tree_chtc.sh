@@ -15,10 +15,10 @@ out="$proj/phylo"
 
 ## HMMTOP parsing script (filter based on TM range and produce sequences based on TM domains)
 # HMMTOP_py="${gh_dir}"/aux/scripts/HMMTOP_extract.py
-HMMTOP_strict_py="${gh_dir}"/aux/scripts/HMMTOP_extract_strict.py
+HMMTOP_strict_py="$gh_dir/aux/scripts/HMMTOP_extract_strict.py"
 
 ## misc
-linearize="${gh_dir}"/aux/scripts/linearizefasta.awk
+linearize="$gh_dir/aux/scripts/linearizefasta.awk"
 
 # count TM domains and extract TM-only sequences for anything with 3-10 TMs -----
 ## copy FASTA files to new directory
@@ -32,8 +32,8 @@ while IFS= read -r line; do
   for f in $db/$line/*.fa* ; do
     array=($(echo "$line" | sed 's/\// /g'))
     species=${array[0]}
-    cd $gh_dir/aux/scripts/hmmtop_2.1/
-    ./hmmtop -if=$out/1/${species}_3.fa -of=$out/1/${species}_1_hmmtop.txt -sf=FAS
+    # cd $gh_dir/aux/scripts/hmmtop_2.1/
+    hmmtop -if=$out/1/${species}_3.fa -of=$out/1/${species}_1_hmmtop.txt -sf=FAS
     python $HMMTOP_strict_py $out/1/${species}_1_hmmtop.txt $out/1/${species}_3.fa $out/2/${species}_2.fa
   done;
 done <$species
