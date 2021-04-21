@@ -70,4 +70,4 @@ cat $out/3/caen_3_linear.aln | tr '\t' '\n' | awk 'NR%2==1' > $out/3/caen_3_ids.
 grep -v -f $out/3/caen_3_ids.txt $out/3/caen_2_ids.txt > $out/3/caen_3_filtered.txt
 
 ### ML tree on server
-iqtree -s $out/3/caen_3.aln -nt AUTO -alrt 1000 -bb 1000
+iqtree -s $out/3/caen_3.aln -nt 40 -alrt 1000 -bb 1000 -m VT+F+R7
