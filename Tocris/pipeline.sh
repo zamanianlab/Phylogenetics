@@ -14,11 +14,14 @@ species=Phylogenetics/Tocris/parasite.list.txt
 # --no-parent: don't ascend to the parent directory during a recursive search
 # -A: comma-separated list of names to accept
 # -P:
+
+mkdir input/proteomes
+
 while IFS= read -r line
 do
   species_dl="$wbp_prefix/$line/"
   printf ${species_dl}"\n"
-  wget -nc -r -nH --cut-dirs=7 --no-parent --reject="index.html*" -A 'protein.fa.gz' $species_dl -P output
+  wget -nc -r -nH --cut-dirs=9 --no-parent --reject="index.html*" -A 'protein.fa.gz' $species_dl -P input/proteomes
 done <"$species"
 
 ## Get IDs and sequences of hits
