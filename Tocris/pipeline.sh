@@ -21,7 +21,7 @@ while IFS= read -r line
 do
   species_dl="$wbp_prefix/$line/"
   printf ${species_dl}"\n"
-  wget -nc -r -nH --cut-dirs=8 --no-parent --reject="index.html*" -A 'protein.fa.gz' $species_dl -P input/proteomes
+  wget -nc -r -nH --cut-dirs=10 --no-parent --reject="index.html*" -A 'protein.fa.gz' $species_dl -P input/proteomes
 done <"$species"
 
 ## Get IDs and sequences of hits
