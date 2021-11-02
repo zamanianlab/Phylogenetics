@@ -35,6 +35,8 @@ do
   makeblastdb -in $proteomes/*.protein.fa -dbtype prot
 done <"$species"
 
+rm $proteomes/*.protein*.gz
+
 makeblastdb -in $proteomes/HsUniProt_nr.fasta -dbtype prot
 
 ## Get IDs and sequences of hits
