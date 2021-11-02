@@ -15,14 +15,27 @@ species=Phylogenetics/Tocris/parasite.list.txt
 # -A: comma-separated list of names to accept
 # -P:
 
+# dowload proteomes
 mkdir input/proteomes
+
+proteomes=input/proteomes
 
 while IFS= read -r line
 do
   species_dl="$wbp_prefix/$line/"
   printf ${species_dl}"\n"
-  wget -nc -r -nH --cut-dirs=10 --no-parent --reject="index.html*" -A 'protein.fa.gz' $species_dl -P input/proteomes
+  wget -nc -r -nH --cut-dirs=10 --no-parent --reject="index.html*" -A 'protein.fa.gz' $species_dl -P $proteomes
 done <"$species"
+
+mv Phylogenetics/Tocris/HsUniProt_nr.fasta $proteomes
+
+while IFS= read -r line
+do
+  gunzip -k $proteomes/*.protein*.gz
+  makeblastdb -in $proteomes/*.protein.fa -dbtype prot
+done <"$species"
+
+makeblastdb -in $proteomes/HsUniProt_nr.fasta -dbtype prot
 
 ## Get IDs and sequences of hits
 # while IFS= read -r line; do
