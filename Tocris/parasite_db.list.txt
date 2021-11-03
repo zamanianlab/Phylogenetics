@@ -1,0 +1,7 @@
+ancylostoma_caninum.PRJNA72585.WBPS16.protein.fa
+ascaris_suum.PRJNA62057.WBPS16.protein.fa
+brugia_malayi.PRJNA10729.WBPS16.protein.fa
+caenorhabditis_elegans.PRJNA13758.WBPS16.protein.fa
+haemonchus_contortus.PRJEB506.WBPS16.protein.fa
+strongyloides_ratti.PRJEB125.WBPS16.protein.fa
+trichuris_muris.PRJEB126.WBPS16.protein.fa
