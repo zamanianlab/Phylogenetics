@@ -45,7 +45,7 @@ mv Phylogenetics/Tocris/Hs_seeds.list.txt work
 mkdir work/1_Hs_seeds
 seeds=work/1_Hs_seeds
 mkdir work/2_Hs_targets
-Hs_targets=work/2_Hs_targets
+Hs_targets=output/2_Hs_targets
 mkdir output/alignments
 alignments=output/alignments
 mv Phylogenetics/Tocris/parasite_db.list.txt work
