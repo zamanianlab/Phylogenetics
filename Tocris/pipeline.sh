@@ -47,10 +47,10 @@ seeds=output/1_Hs_seeds
 
 while IFS= read -r line; do
  	printf '%s\n' "$line"
-  	echo "$line" > temp.line.txt
+  echo "$line" > work/temp.line.txt
  	line_sub=$(echo "$line" | awk 'BEGIN { FS = "|" } ; { print $3 }')
- 	seqtk subseq $proteomes/HsUniProt_nr.fasta temp.line.txt > $seeds/Hs_seeds.$line_sub.fasta
- 	rm temp.line.txt
+ 	seqtk subseq $proteomes/HsUniProt_nr.fasta work/temp.line.txt > $seeds/Hs_seeds.$line_sub.fasta
+ 	#rm temp.line.txt
 done < input/Hs_seeds.list.txt
 #
 #  	#blast seed to human proteome to expand targets
