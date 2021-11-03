@@ -44,8 +44,10 @@ makeblastdb -in $proteomes/HsUniProt_nr.fasta -dbtype prot
 mv Phylogenetics/Tocris/Hs_seeds.list.txt work
 mkdir work/1_Hs_seeds
 seeds=work/1_Hs_seeds
-mkdir output/Hs_targets
-Hs_targets=output/Hs_targets
+mkdir work/Hs_targets
+Hs_targets=work/Hs_targets
+mkdir output/alignments
+mv Phylogenetics/Tocris/parasite.list.txt work
 
 # Get IDs and sequences of hits
 while IFS= read -r line; do
@@ -56,20 +58,21 @@ while IFS= read -r line; do
  	rm work/temp.line.txt
 
  	#blast seed to human proteome to expand targets
-  blastp -query work/1_Hs_seeds/Hs_seeds.$line_sub.fasta -db $proteomes/HsUniProt_nr.fasta -out output/Hs_targets/$line_sub.out -outfmt 6 -max_hsps 1 -evalue 1E-3 -num_threads 4
-  cat output/Hs_targets/$line_sub.out | awk '$3>50.000 && $11<1E-3 {print $2}' | sort | uniq > output/Hs_targets/$line_sub.list.txt
-	seqtk subseq $proteomes/HsUniProt_nr.fasta output/Hs_targets/$line_sub.list.txt > $Hs_targets/$line_sub.ext.fasta
+  blastp -query "$seeds"/Hs_seeds.$line_sub.fasta -db $proteomes/HsUniProt_nr.fasta -out work/Hs_targets/$line_sub.out -outfmt 6 -max_hsps 1 -evalue 1E-3 -num_threads 4
+  cat work/Hs_targets/$line_sub.out | awk '$3>50.000 && $11<1E-3 {print $2}' | sort | uniq > work/Hs_targets/$line_sub.list.txt
+	seqtk subseq $proteomes/HsUniProt_nr.fasta work/Hs_targets/$line_sub.list.txt > $Hs_targets/$line_sub.ext.fasta
   rm $Hs_targets/*.out
+
+	# cat work/Hs_targets/$line_sub.ext.fasta | sed 's/>/>Homo_sapiens|/g' > output/alignments/$line_sub.combined.fasta
+	# while IFS= read -r paradb; do
+	# 	#blast expanded human targets against parasite dbs
+	# 	para_name=$(echo "$paradb" | awk 'BEGIN { FS = "." } ; { print $1 }')
+	# 	echo "$para_name"
+	# 	blastp -query Hs_targets/$line_sub.ext.fasta -db parasite_db/$paradb -out Para_blast/$line_sub.$para_name.out -outfmt 6 -max_hsps 1 -evalue 1E-1 -num_threads 4
+	# 	cat Para_blast/$line_sub.$para_name.out | awk '$3>30.000 && $11<1E-3 {print $2}' | sort | uniq  > Para_blast/$line_sub.$para_name.list.txt
+	# 	seqtk subseq parasite_db/$paradb Para_blast/$line_sub.$para_name.list.txt >  Para_targets_1/$line_sub.$para_name.fasta
+  # done < parasite_db/parasite_db.list.txt
 done < work/Hs_seeds.list.txt
-#
-# 	cat Hs_targets/$line_sub.ext.fasta | sed 's/>/>Homo_sapiens|/g' > alignments/$line_sub.combined.fasta
-# 	while IFS= read -r paradb; do
-# 		#blast expanded human targets against parasite dbs
-# 		para_name=$(echo "$paradb" | awk 'BEGIN { FS = "." } ; { print $1 }')
-# 		echo "$para_name"
-# 		blastp -query Hs_targets/$line_sub.ext.fasta -db parasite_db/$paradb -out Para_blast/$line_sub.$para_name.out -outfmt 6 -max_hsps 1 -evalue 1E-1 -num_threads 4
-# 		cat Para_blast/$line_sub.$para_name.out | awk '$3>30.000 && $11<1E-3 {print $2}' | sort | uniq  > Para_blast/$line_sub.$para_name.list.txt
-# 		seqtk subseq parasite_db/$paradb Para_blast/$line_sub.$para_name.list.txt >  Para_targets_1/$line_sub.$para_name.fasta
 # 		#blast parasite hits against human db
 # 		blastp -query Para_targets_1/$line_sub.$para_name.fasta -db human_db/HsUniProt_nr.fasta -out Recip_blast/$line_sub.$para_name.out -outfmt 6 -max_hsps 1 -evalue 1E-3 -num_threads 4
 # 		cat Recip_blast/$line_sub.$para_name.out | awk '$3>30.000 && $11<1E-3 {print $1, $2}' | sort | uniq  > Recip_blast/$line_sub.$para_name.list.txt
