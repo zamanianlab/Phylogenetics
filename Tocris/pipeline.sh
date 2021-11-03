@@ -44,8 +44,8 @@ makeblastdb -in $proteomes/HsUniProt_nr.fasta -dbtype prot
 mv Phylogenetics/Tocris/Hs_seeds.list.txt work
 mkdir work/1_Hs_seeds
 seeds=work/1_Hs_seeds
-mkdir work/Hs_targets
-Hs_targets=work/Hs_targets
+mkdir output/Hs_targets
+Hs_targets=output/Hs_targets
 mkdir output/alignments
 mv Phylogenetics/Tocris/parasite.list.txt work
 
@@ -58,9 +58,9 @@ while IFS= read -r line; do
  	rm work/temp.line.txt
 
  	#blast seed to human proteome to expand targets
-  blastp -query "$seeds"/Hs_seeds.$line_sub.fasta -db $proteomes/HsUniProt_nr.fasta -out work/Hs_targets/$line_sub.out -outfmt 6 -max_hsps 1 -evalue 1E-3 -num_threads 4
-  cat work/Hs_targets/$line_sub.out | awk '$3>50.000 && $11<1E-3 {print $2}' | sort | uniq > work/Hs_targets/$line_sub.list.txt
-	seqtk subseq $proteomes/HsUniProt_nr.fasta work/Hs_targets/$line_sub.list.txt > $Hs_targets/$line_sub.ext.fasta
+  blastp -query $seeds/Hs_seeds."$line_sub".fasta -db $proteomes/HsUniProt_nr.fasta -out $Hs_targets/"$line_sub".out -outfmt 6 -max_hsps 1 -evalue 1E-3 -num_threads 4
+  cat $Hs_targets/"$line_sub".out | awk '$3>50.000 && $11<1E-3 {print $2}' | sort | uniq > $Hs_targets/"$line_sub".list.txt
+	seqtk subseq $proteomes/HsUniProt_nr.fasta $Hs_targets/"$line_sub".list.txt > $Hs_targets/"$line_sub".ext.fasta
   rm $Hs_targets/*.out
 
 	# cat work/Hs_targets/$line_sub.ext.fasta | sed 's/>/>Homo_sapiens|/g' > output/alignments/$line_sub.combined.fasta
