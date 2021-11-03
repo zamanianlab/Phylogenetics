@@ -42,8 +42,8 @@ makeblastdb -in $proteomes/HsUniProt_nr.fasta -dbtype prot
 
 # Get IDs and sequences of hits
 mv Phylogenetics/Tocris/Hs_seeds.list.txt input
-mkdir work/Hs_seeds
-seeds=work/1_Hs_seeds
+mkdir output/Hs_seeds
+seeds=output/1_Hs_seeds
 
 while IFS= read -r line; do
  	printf '%s\n' "$line"
