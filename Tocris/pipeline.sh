@@ -17,7 +17,7 @@ species=Phylogenetics/Tocris/parasite.list.txt
 
 # dowload parasite proteomes
 mkdir input/proteomes
-proteomes=output/proteomes
+proteomes=input/proteomes
 
 while IFS= read -r line
 do
