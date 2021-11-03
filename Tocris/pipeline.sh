@@ -51,12 +51,16 @@ while IFS= read -r line; do
  	line_sub=$(echo "$line" | awk 'BEGIN { FS = "|" } ; { print $3 }')
  	seqtk subseq $proteomes/HsUniProt_nr.fasta work/temp.line.txt > $seeds/Hs_seeds.$line_sub.fasta
  	rm work/temp.line.txt
+
+ 	#blast seed to human proteome to expand targets
+  mkdir output/Hs_targets
+  Hs_targets=output/Hs_targets
+
+  blastp -query $seeds/Hs_seeds.$line_sub.fasta -db $proteomes/HsUniProt_nr.fasta -out $Hs_target/$line_sub.out -outfmt 6 -max_hsps 1 -evalue 1E-3 -num_threads 4
+	cat $Hs_target/$line_sub.out | awk '$3>50.000 && $11<1E-3 {print $2}' | sort | uniq  > $Hs_target/$line_sub.list.txt
+	seqtk subseq $proteomes/HsUniProt_nr.fasta $Hs_targets/$line_sub.list.txt >  $Hs_targets/$line_sub.ext.fasta
+  rm *.out
 done < work/Hs_seeds.list.txt
-#
-#  	#blast seed to human proteome to expand targets
-# 	blastp -query Hs_seeds/Hs_seeds.$line_sub.fasta -db human_db/HsUniProt_nr.fasta -out Hs_blast/$line_sub.out -outfmt 6 -max_hsps 1 -evalue 1E-3 -num_threads 4
-# 	cat Hs_blast/$line_sub.out | awk '$3>50.000 && $11<1E-3 {print $2}' | sort | uniq  > Hs_blast/$line_sub.list.txt
-# 	seqtk subseq human_db/HsUniProt_nr.fasta Hs_blast/$line_sub.list.txt >  Hs_targets/$line_sub.ext.fasta
 #
 # 	cat Hs_targets/$line_sub.ext.fasta | sed 's/>/>Homo_sapiens|/g' > alignments/$line_sub.combined.fasta
 # 	while IFS= read -r paradb; do
