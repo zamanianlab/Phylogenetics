@@ -15,10 +15,9 @@ species=Phylogenetics/Tocris/parasite.list.txt
 # -A: comma-separated list of names to accept
 # -P:
 
-# dowload proteomes
-mkdir output/proteomes
-
-proteomes=output/proteomes
+# dowload parasite proteomes
+mkdir input/proteomes
+proteomes=input/proteomes
 
 while IFS= read -r line
 do
@@ -27,8 +26,10 @@ do
   wget -nc -r -nH --cut-dirs=10 --no-parent --reject="index.html*" -A 'protein.fa.gz' $species_dl -P $proteomes
 done <"$species"
 
+# add human proteome
 mv Phylogenetics/Tocris/HsUniProt_nr.fasta $proteomes
 
+# make blast databases
 while IFS= read -r line
 do
   gunzip -k $proteomes/*.protein*.gz
@@ -39,13 +40,18 @@ rm $proteomes/*.protein*.gz
 
 makeblastdb -in $proteomes/HsUniProt_nr.fasta -dbtype prot
 
-## Get IDs and sequences of hits
-# while IFS= read -r line; do
-#  	printf '%s\n' "$line"
-#   	echo "$line" > temp.line.txt
-#  	line_sub=$(echo "$line" | awk 'BEGIN { FS = "|" } ; { print $3 }')
-#  	seqtk subseq human_db/HsUniProt_nr.fasta temp.line.txt > Hs_seeds/Hs_seeds.$line_sub.fasta
-#  	rm temp.line.txt
+# Get IDs and sequences of hits
+mv Phylogenetics/Tocris/Hs_seeds.list.txt input
+mkdir work/Hs_seeds
+seeds=work/1_Hs_seeds
+
+while IFS= read -r line; do
+ 	printf '%s\n' "$line"
+  	echo "$line" > temp.line.txt
+ 	line_sub=$(echo "$line" | awk 'BEGIN { FS = "|" } ; { print $3 }')
+ 	seqtk subseq $proteomes/HsUniProt_nr.fasta temp.line.txt > $seeds/Hs_seeds.$line_sub.fasta
+ 	rm temp.line.txt
+done < input/Hs_seeds.list.txt
 #
 #  	#blast seed to human proteome to expand targets
 # 	blastp -query Hs_seeds/Hs_seeds.$line_sub.fasta -db human_db/HsUniProt_nr.fasta -out Hs_blast/$line_sub.out -outfmt 6 -max_hsps 1 -evalue 1E-3 -num_threads 4
