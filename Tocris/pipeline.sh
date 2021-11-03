@@ -57,7 +57,7 @@ while IFS= read -r line; do
 
  	#blast seed to human proteome to expand targets
   blastp -query work/1_Hs_seeds/Hs_seeds.$line_sub.fasta -db $proteomes/HsUniProt_nr.fasta -out output/Hs_targets/$line_sub.out -outfmt 6 -max_hsps 1 -evalue 1E-3 -num_threads 4
-  cat output/Hs_targets/$line_sub.out | awk '$3>50.000 && $11<1E-3 {print $2}' | sort | uniq > $Hs_target/$line_sub.list.txt
+  cat output/Hs_targets/$line_sub.out | awk '$3>50.000 && $11<1E-3 {print $2}' | sort | uniq > output/Hs_targets/$line_sub.list.txt
 	# seqtk subseq $proteomes/HsUniProt_nr.fasta output/Hs_targets/$line_sub.list.txt > $Hs_targets/$line_sub.ext.fasta
   # rm $Hs_targets/*.out
 done < work/Hs_seeds.list.txt
