@@ -68,7 +68,7 @@ while IFS= read -r line; do
 	seqtk subseq $proteomes/HsUniProt_nr.fasta $Hs_targets/"$line_sub".list.txt > $Hs_targets/"$line_sub".ext.fasta
   rm $Hs_targets/*.out
 
-	cat $Hs_targets/"$line_sub".ext.fasta | sed 's/>/>Homo_sapiens|/g' > $alignments/"$line_sub".combined.fasta
+	# cat $Hs_targets/"$line_sub".ext.fasta | sed 's/>/>Homo_sapiens|/g' > $alignments/"$line_sub".combined.fasta
 	# while IFS= read -r paradb; do
 	# 	#blast expanded human targets against parasite dbs
 	# 	para_name=$(echo "$paradb" | awk 'BEGIN { FS = "." } ; { print $1 }')
