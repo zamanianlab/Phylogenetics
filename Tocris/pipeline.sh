@@ -32,8 +32,10 @@ mv Phylogenetics/Tocris/HsUniProt_nr.fasta $proteomes
 make blast databases
 while IFS= read -r line
 do
-  gunzip -k $proteomes/"$species".*.protein.fa.gz
-  makeblastdb -in $proteomes/"$species".*.protein.fa -dbtype prot
+  species_prjn="$(cat $line | sed 's/\//\./g')"
+  echo $species_prjn
+  gunzip -k $proteomes/"$species_prjn".*.protein.fa.gz
+  makeblastdb -in $proteomes/"$species_prjn".*.protein.fa -dbtype prot
 done <"$species"
 
 rm $proteomes/*.protein*.gz
