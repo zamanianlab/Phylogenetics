@@ -33,7 +33,7 @@ make blast databases
 while IFS= read -r line
 do
   species_prjn="$(cat $line | sed 's/\//\./g')"
-  echo $species_prjn
+  echo $species_prjn > output/temp.txt
   gunzip -k $proteomes/"$species_prjn".*.protein.fa.gz
   makeblastdb -in $proteomes/"$species_prjn".*.protein.fa -dbtype prot
 done <"$species"
