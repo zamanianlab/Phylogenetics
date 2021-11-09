@@ -29,7 +29,7 @@ done <"$species"
 # add human proteome
 mv Phylogenetics/Tocris/HsUniProt_nr.fasta $proteomes
 
-make blast databases
+# make blast databases
 while IFS= read -r line
 do
   species_prjn="$(cat $line | sed 's/\//\./g')"
