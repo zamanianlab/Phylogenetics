@@ -26,7 +26,7 @@ do
   wget -nc -r -nH --cut-dirs=10 --no-parent --reject="index.html*" -A 'protein.fa.gz' $species_dl -P $proteomes
 done <"$species"
 
-add human proteome
+# add human proteome
 mv Phylogenetics/Tocris/HsUniProt_nr.fasta $proteomes
 
 make blast databases
