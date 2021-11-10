@@ -33,7 +33,7 @@ mv Phylogenetics/Tocris/HsUniProt_nr.fasta $proteomes
 while IFS= read -r line
 do
   species_prjn="$(echo $line | sed 's/\//\./g')"
-  echo $species_prjn > output/temp.txt
+  echo $species_prjn > work/temp.txt
   gunzip -k $proteomes/"$species_prjn".*.protein.fa.gz
   makeblastdb -in $proteomes/"$species_prjn".*.protein.fa -dbtype prot
 done <"$species"
@@ -86,16 +86,12 @@ while IFS= read -r line; do
     grep -Ff $Hs_targets/"$line_sub".list.txt $Para_recip/"$line_sub"."$para_name".list.txt | awk '{print $1}' | sort | uniq > $Para_final/"$line_sub"."$para_name".list.txt
     seqtk subseq $proteomes/$paradb $Para_final/"$line_sub"."$para_name".list.txt > $Para_final/"$line_sub"."$para_name".fasta
     cat $Para_final/"$line_sub"."$para_name".fasta | sed 's/>/>'$para_name'|/g' >> $alignments/"$line_sub".combined.fasta
+    #align mafft
+    einsi --reorder --thread 2 $alignments/"$line_sub".combined.fasta > $alignments/"$line_sub".combined.aln
+    #trim
+    trimal -gt 0.7 -in $alignments/"$line_sub".combined.aln -out $alignments/"$line_sub".combined_trim.aln
+    trimal -resoverlap 0.70 -seqoverlap 70 -in $alignments/"$line_sub".combined_trim.aln -out $alignments/"$line_sub".combined_final.aln
+    #tree-building
+    iqtree-2.1.3-MacOSX/bin/iqtree2 -s $alignments/"$line_sub".combined_final.aln -nt 4 -alrt 1000 -bb 1000
   done < work/parasite_db.list.txt
 done < work/Hs_seeds.list.txt
-# 		#align mafft
-# 		einsi --reorder --thread 2 alignments/$line_sub.combined.fasta > alignments/$line_sub.combined.aln
-# 		#trim
-# 		trimal -gt 0.7 -in alignments/$line_sub.combined.aln -out alignments/$line_sub.combined_trim.aln
-# 		trimal -resoverlap 0.70 -seqoverlap 70 -in alignments/$line_sub.combined_trim.aln -out alignments/$line_sub.combined_final.aln
-#
-# 		#tree-building
-# 		iqtree-2.1.3-MacOSX/bin/iqtree2 -s alignments/$line_sub.combined_final.aln -nt 4 -alrt 1000 -bb 1000
-# 	done < parasite_db/parasite_db.list.txt
-#
-# done < Hs_seeds/Hs_seeds.list.txt
