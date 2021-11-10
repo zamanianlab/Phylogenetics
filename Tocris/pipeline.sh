@@ -51,10 +51,12 @@ Hs_targets=work/2_Hs_targets
 mkdir output/alignments
 alignments=output/alignments
 mv Phylogenetics/Tocris/parasite_db.list.txt work
-mkdir output/3_Para_targets
-Para_targets=output/3_Para_targets
-mkdir output/4_Para_recip
-Para_recip=output/4_Para_recip
+mkdir work/3_Para_targets
+Para_targets=work/3_Para_targets
+mkdir work/4_Para_recip
+Para_recip=work/4_Para_recip
+mkdir output/5_Para_final
+Para_final=output/5_Para_final
 
 # Get IDs and sequences of hits
 while IFS= read -r line; do
@@ -80,13 +82,12 @@ while IFS= read -r line; do
     #blast parasite hits against human db
     blastp -query $Para_targets/"$line_sub"."$para_name".fasta -db $proteomes/HsUniProt_nr.fasta -out $Para_recip/"$line_sub"."$para_name".out -outfmt 6 -max_hsps 1 -evalue 1E-3 -num_threads 4
     cat $Para_recip/"$line_sub"."$para_name".out | awk '$3>30.000 && $11<1E-3 {print $1, $2}' | sort | uniq  > $Para_recip/"$line_sub"."$para_name".list.txt
+    #compare to original human list to find surviving parasite targets
+    grep -Ff $Hs_targets/"$line_sub".list.txt $Para_recip/"$line_sub"."$para_name".list.txt | awk '{print $1}' | sort | uniq > $Para_final/"$line_sub"."$para_name".list.txt
+    seqtk subseq $proteomes/$paradb $Para_final/"$line_sub"."$para_name".list.txt > $Para_final/"$line_sub"."$para_name".fasta
+    cat $Para_final/"$line_sub"."$para_name".fasta | sed 's/>/>'$para_name'|/g' >> $alignments/"$line_sub".combined.fasta
   done < work/parasite_db.list.txt
 done < work/Hs_seeds.list.txt
-# 		#compare to original human list to find surviving parasite targets
-# 		grep -Ff Hs_blast/$line_sub.list.txt Recip_blast/$line_sub.$para_name.list.txt | awk '{print $1}' | sort | uniq > Para_targets/$line_sub.$para_name.list.txt
-# 		seqtk subseq parasite_db/$paradb Para_targets/$line_sub.$para_name.list.txt > Para_targets/$line_sub.$para_name.fasta
-# 		cat Para_targets/$line_sub.$para_name.fasta | sed 's/>/>'$para_name'|/g' >> alignments/$line_sub.combined.fasta
-#
 # 		#align mafft
 # 		einsi --reorder --thread 2 alignments/$line_sub.combined.fasta > alignments/$line_sub.combined.aln
 # 		#trim
