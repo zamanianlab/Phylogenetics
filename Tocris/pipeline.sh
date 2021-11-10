@@ -53,8 +53,8 @@ alignments=output/alignments
 mv Phylogenetics/Tocris/parasite_db.list.txt work
 mkdir output/3_Para_targets
 Para_targets=output/3_Para_targets
-mkdir output/4_Para_final
-Para_final=output/4_Parafinal
+mkdir output/4_Para_recip
+Para_recip=output/4_Para_recip
 
 # Get IDs and sequences of hits
 while IFS= read -r line; do
@@ -77,11 +77,11 @@ while IFS= read -r line; do
     blastp -query $Hs_targets/"$line_sub".ext.fasta -db $proteomes/$paradb -out $Para_targets/"$line_sub"."$para_name".out -outfmt 6 -max_hsps 1 -evalue 1E-1 -num_threads 4
 		cat $Para_targets/"$line_sub"."$para_name".out | awk '$3>30.000 && $11<1E-3 {print $2}' | sort | uniq > $Para_targets/"$line_sub"."$para_name".list.txt
 		seqtk subseq $proteomes/$paradb $Para_targets/"$line_sub"."$para_name".list.txt > $Para_targets/"$line_sub"."$para_name".fasta
+    #blast parasite hits against human db
+    blastp -query $Para_targets/"$line_sub"."$para_name".fasta -db $proteomes/HsUniProt_nr.fasta -out $Para_recip/"$line_sub"."$para_name".out -outfmt 6 -max_hsps 1 -evalue 1E-3 -num_threads 4
+    cat $Para_recip/"$line_sub"."$para_name".out | awk '$3>30.000 && $11<1E-3 {print $1, $2}' | sort | uniq  > $Para_recip/"$line_sub"."$para_name".list.txt
   done < work/parasite_db.list.txt
 done < work/Hs_seeds.list.txt
-# 		#blast parasite hits against human db
-# 		blastp -query Para_targets_1/$line_sub.$para_name.fasta -db human_db/HsUniProt_nr.fasta -out Recip_blast/$line_sub.$para_name.out -outfmt 6 -max_hsps 1 -evalue 1E-3 -num_threads 4
-# 		cat Recip_blast/$line_sub.$para_name.out | awk '$3>30.000 && $11<1E-3 {print $1, $2}' | sort | uniq  > Recip_blast/$line_sub.$para_name.list.txt
 # 		#compare to original human list to find surviving parasite targets
 # 		grep -Ff Hs_blast/$line_sub.list.txt Recip_blast/$line_sub.$para_name.list.txt | awk '{print $1}' | sort | uniq > Para_targets/$line_sub.$para_name.list.txt
 # 		seqtk subseq parasite_db/$paradb Para_targets/$line_sub.$para_name.list.txt > Para_targets/$line_sub.$para_name.fasta
