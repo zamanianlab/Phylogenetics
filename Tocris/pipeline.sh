@@ -81,7 +81,7 @@ while IFS= read -r line; do
 		seqtk subseq $proteomes/$paradb $Para_targets/"$line_sub"."$para_name".list.txt > $Para_targets/"$line_sub"."$para_name".fasta
     #blast parasite hits against human db
     blastp -query $Para_targets/"$line_sub"."$para_name".fasta -db $proteomes/HsUniProt_nr.fasta -out $Para_recip/"$line_sub"."$para_name".out -outfmt 6 -max_hsps 1 -evalue 1E-3 -num_threads 4
-    cat $Para_recip/"$line_sub"."$para_name".out | awk '$3>60.000 && $11<1E-3 {print $1, $2}' | sort | uniq  > $Para_recip/"$line_sub"."$para_name".list.txt
+    cat $Para_recip/"$line_sub"."$para_name".out | awk '$3>45.000 && $11<1E-3 {print $1, $2}' | sort | uniq  > $Para_recip/"$line_sub"."$para_name".list.txt
     #compare to original human list to find surviving parasite targets
     grep -Ff $Hs_targets/"$line_sub".list.txt $Para_recip/"$line_sub"."$para_name".list.txt | awk '{print $1}' | sort | uniq > $Para_final/"$line_sub"."$para_name".list.txt
     seqtk subseq $proteomes/$paradb $Para_final/"$line_sub"."$para_name".list.txt > $Para_final/"$line_sub"."$para_name".fasta
