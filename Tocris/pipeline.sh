@@ -68,7 +68,7 @@ while IFS= read -r line; do
 
  	#blast seed to human proteome to expand targets
   blastp -query $seeds/Hs_seeds."$line_sub".fasta -db $proteomes/HsUniProt_nr.fasta -out $Hs_targets/"$line_sub".out -outfmt 6 -max_hsps 1 -evalue 1E-3 -num_threads 4
-  cat $Hs_targets/"$line_sub".out | awk '$3>50.000 && $11<1E-3 {print $2}' | sort | uniq > $Hs_targets/"$line_sub".list.txt
+  cat $Hs_targets/"$line_sub".out | awk '$3>60.000 && $11<1E-3 {print $2}' | sort | uniq > $Hs_targets/"$line_sub".list.txt
   seqtk subseq $proteomes/HsUniProt_nr.fasta $Hs_targets/"$line_sub".list.txt > $Hs_targets/"$line_sub".ext.fasta
   rm $Hs_targets/*.out
 
@@ -77,11 +77,11 @@ while IFS= read -r line; do
 		#blast expanded human targets against parasite dbs
     para_name=$(echo "$paradb" | awk 'BEGIN { FS = "." } ; { print $1 }')
     blastp -query $Hs_targets/"$line_sub".ext.fasta -db $proteomes/$paradb -out $Para_targets/"$line_sub"."$para_name".out -outfmt 6 -max_hsps 1 -evalue 1E-1 -num_threads 4
-		cat $Para_targets/"$line_sub"."$para_name".out | awk '$3>30.000 && $11<1E-3 {print $2}' | sort | uniq > $Para_targets/"$line_sub"."$para_name".list.txt
+		cat $Para_targets/"$line_sub"."$para_name".out | awk '$3>50.000 && $11<1E-3 {print $2}' | sort | uniq > $Para_targets/"$line_sub"."$para_name".list.txt
 		seqtk subseq $proteomes/$paradb $Para_targets/"$line_sub"."$para_name".list.txt > $Para_targets/"$line_sub"."$para_name".fasta
     #blast parasite hits against human db
     blastp -query $Para_targets/"$line_sub"."$para_name".fasta -db $proteomes/HsUniProt_nr.fasta -out $Para_recip/"$line_sub"."$para_name".out -outfmt 6 -max_hsps 1 -evalue 1E-3 -num_threads 4
-    cat $Para_recip/"$line_sub"."$para_name".out | awk '$3>45.000 && $11<1E-3 {print $1, $2}' | sort | uniq  > $Para_recip/"$line_sub"."$para_name".list.txt
+    cat $Para_recip/"$line_sub"."$para_name".out | awk '$3>50.000 && $11<1E-3 {print $1, $2}' | sort | uniq  > $Para_recip/"$line_sub"."$para_name".list.txt
     #compare to original human list to find surviving parasite targets
     grep -Ff $Hs_targets/"$line_sub".list.txt $Para_recip/"$line_sub"."$para_name".list.txt | awk '{print $1}' | sort | uniq > $Para_final/"$line_sub"."$para_name".list.txt
     seqtk subseq $proteomes/$paradb $Para_final/"$line_sub"."$para_name".list.txt > $Para_final/"$line_sub"."$para_name".fasta
