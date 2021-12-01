@@ -61,7 +61,7 @@ Para_final=output/5_Para_final
 # Get IDs and sequences of hits
 # while IFS= read -r line; do
 #   printf '%s\n' "$line"
-print $1 > output/temp.line.txt
+echo $1 > output/temp.line.txt
 # line_sub=$(echo $dir | awk 'BEGIN { FS = "|" } ; { print $3 }')
 seqtk subseq $proteomes/HsUniProt_nr.fasta output/temp.line.txt > $seeds/Hs_seeds.$1.fasta
 #rm work/temp.line.txt
