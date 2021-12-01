@@ -44,9 +44,9 @@ makeblastdb -in $proteomes/HsUniProt_nr.fasta -dbtype prot
 
 # set up directories and move files
 mv Phylogenetics/Tocris/Hs_seeds.list.txt work
-mkdir work/1_Hs_seeds
+mkdir output/1_Hs_seeds
 seeds=output/1_Hs_seeds
-mkdir output/2_Hs_targets
+mkdir work/2_Hs_targets
 Hs_targets=work/2_Hs_targets
 mkdir output/alignments
 alignments=output/alignments
