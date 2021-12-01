@@ -45,8 +45,8 @@ makeblastdb -in $proteomes/HsUniProt_nr.fasta -dbtype prot
 # set up directories and move files
 mv Phylogenetics/Tocris/Hs_seeds.list.txt work
 mkdir work/1_Hs_seeds
-seeds=work/1_Hs_seeds
-mkdir work/2_Hs_targets
+seeds=output/1_Hs_seeds
+mkdir output/2_Hs_targets
 Hs_targets=work/2_Hs_targets
 mkdir output/alignments
 alignments=output/alignments
@@ -61,9 +61,9 @@ Para_final=output/5_Para_final
 # Get IDs and sequences of hits
 # while IFS= read -r line; do
 #   printf '%s\n' "$line"
-print $dir > output/temp.line.txt
-line_sub=$(echo $dir | awk 'BEGIN { FS = "|" } ; { print $3 }')
-seqtk subseq $proteomes/HsUniProt_nr.fasta output/temp.line.txt > $seeds/Hs_seeds.$line_sub.fasta
+print $1 > output/temp.line.txt
+# line_sub=$(echo $dir | awk 'BEGIN { FS = "|" } ; { print $3 }')
+seqtk subseq $proteomes/HsUniProt_nr.fasta output/temp.line.txt > $seeds/Hs_seeds.$1.fasta
 #rm work/temp.line.txt
 
 #blast seed to human proteome to expand targets
