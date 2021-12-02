@@ -60,10 +60,10 @@ Para_final=output/5_Para_final
 
 # Get IDs and sequences of hits
 # while IFS= read -r line; do
-#   printf '%s\n' "$line"
-echo $1 > output/temp.line.txt
+printf '%s\n' $1
+echo "$1" > output/temp.line.txt
 # line_sub=$(echo $dir | awk 'BEGIN { FS = "|" } ; { print $3 }')
-seqtk subseq $proteomes/HsUniProt_nr.fasta output/temp.line.txt > $seeds/Hs_seeds.$1.fasta
+seqtk subseq $proteomes/HsUniProt_nr.fasta output/temp.line.txt > $seeds/Hs_seeds."$1".fasta
 #rm work/temp.line.txt
 
 #blast seed to human proteome to expand targets
