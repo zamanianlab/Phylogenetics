@@ -93,6 +93,9 @@ while IFS= read -r paradb; do
     trimal -resoverlap 0.70 -seqoverlap 70 -in $alignments/"$line_sub".combined_trim.aln -out $alignments/"$line_sub".combined_final.aln
     rm $alignments/"$line_sub".combined.aln
     rm $alignments/"$line_sub".combined_trim.aln
+    touch test1.txt
+    touch test2.txt
+    rm test1.txt
     #tree-building
     iqtree-2.1.3-MacOSX/bin/iqtree2 -s $alignments/"$line_sub".combined_final.aln -nt 80 -alrt 1000 -bb 1000
 done < work/parasite_db.list.txt
