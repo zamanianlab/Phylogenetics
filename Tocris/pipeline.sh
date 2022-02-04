@@ -94,6 +94,6 @@ while IFS= read -r paradb; do
     rm $alignments/"$line_sub".combined.aln
     rm $alignments/"$line_sub".combined_trim.aln
     #tree-building
-    iqtree-2.1.3-MacOSX/bin/iqtree2 -s $alignments/"$line_sub".combined_final.aln -nt 4 -alrt 1000 -bb 1000
+    iqtree-2.1.3-MacOSX/bin/iqtree2 -s $alignments/"$line_sub".combined_final.aln -nt 40 -alrt 1000 -bb 1000
 done < work/parasite_db.list.txt
 #done < work/Hs_seeds.list.txt
