@@ -55,11 +55,8 @@ Para_final=work/5_Para_final
 
 # Get IDs and sequences of hits
 # while IFS= read -r line; do
-printf '%s\n' $1
-echo $1 > work/temp.line.txt
-line_sub=$(echo $1 | awk 'BEGIN { FS = "|" } ; { print $3 }')
-seqtk subseq $proteomes/HsUniProt_nr.fasta output/temp.line.txt > $seeds/Hs_seeds.target.fasta
-rm work/temp.line.txt
+echo $line_sub work/line_sub.txt
+seqtk subseq $proteomes/HsUniProt_nr.fasta work/line_sub.txt > $seeds/Hs_seeds.target.fasta
 
 # blast seed to human proteome to expand targets
 blastp -query $seeds/Hs_seeds."$line_sub".fasta -db $proteomes/HsUniProt_nr.fasta -out $Hs_targets/"$line_sub".out -outfmt 6 -max_hsps 1 -evalue 1E-3 -num_threads 4
