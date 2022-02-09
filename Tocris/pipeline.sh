@@ -1,6 +1,6 @@
 #!/bin/bash
 
-
+line_sub=$1
 
 wbp_prefix="ftp://ftp.ebi.ac.uk/pub/databases/wormbase/parasite/releases/current/species/"
 
@@ -44,8 +44,8 @@ makeblastdb -in $proteomes/HsUniProt_nr.fasta -dbtype prot
 
 # set up directories and move files
 mv Phylogenetics/Tocris/Hs_seeds.list.txt work
-mkdir output/1_Hs_seeds
-seeds=output/1_Hs_seeds
+mkdir work/1_Hs_seeds
+seeds=work/1_Hs_seeds
 mkdir work/2_Hs_targets
 Hs_targets=work/2_Hs_targets
 mkdir output/alignments
@@ -56,13 +56,13 @@ Para_targets=work/3_Para_targets
 mkdir work/4_Para_recip
 Para_recip=work/4_Para_recip
 mkdir output/5_Para_final
-Para_final=output/5_Para_final
+Para_final="$line_sub"_output/5_Para_final
 
 # Get IDs and sequences of hits
 # while IFS= read -r line; do
-printf '%s\n' target
-echo $1 > output/temp.line.txt
-line_sub=$(echo $dir | awk 'BEGIN { FS = "|" } ; { print $3 }')
+printf '%s\n' $1
+echo $1 > work/temp.line.txt
+line_sub=$(echo $1 | awk 'BEGIN { FS = "|" } ; { print $3 }')
 seqtk subseq $proteomes/HsUniProt_nr.fasta output/temp.line.txt > $seeds/Hs_seeds.target.fasta
 rm work/temp.line.txt
 
