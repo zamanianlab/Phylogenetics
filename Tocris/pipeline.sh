@@ -43,20 +43,20 @@ rm $proteomes/*.protein*.gz
 makeblastdb -in $proteomes/HsUniProt_nr.fasta -dbtype prot
 
 # set up directories and move files
-mv Phylogenetics/Tocris/Hs_seeds.list.txt work
-mkdir work/1_Hs_seeds
+cd work
+mkdir 1_Hs_seeds 2_Hs_targets alignments 3_Para_targets 4_Para_recip 5_Para_final
+
 seeds=work/1_Hs_seeds
-mkdir work/2_Hs_targets
+
 Hs_targets=work/2_Hs_targets
-mkdir output/alignments
-alignments=output/alignments
-mv Phylogenetics/Tocris/parasite_db.list.txt work
-mkdir work/3_Para_targets
+
+alignments=work/alignments
+
 Para_targets=work/3_Para_targets
-mkdir work/4_Para_recip
+
 Para_recip=work/4_Para_recip
-mkdir output/5_Para_final
-Para_final="$line_sub"_output/5_Para_final
+
+Para_final=work/5_Para_final
 
 # Get IDs and sequences of hits
 # while IFS= read -r line; do
@@ -98,5 +98,4 @@ while IFS= read -r paradb; do
     rm $alignments/test1.txt
     #tree-building
     iqtree-2.1.3-MacOSX/bin/iqtree2 -s $alignments/"$line_sub".combined_final.aln -nt 80 -alrt 1000 -bb 1000
-done < work/parasite_db.list.txt
-#done < work/Hs_seeds.list.txt
+done < Phylogenetics/Tocris/parasite_db.list.txt
