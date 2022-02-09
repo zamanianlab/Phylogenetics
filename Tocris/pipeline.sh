@@ -53,13 +53,12 @@ Para_targets=work/3_Para_targets
 Para_recip=work/4_Para_recip
 Para_final=work/5_Para_final
 
-# Get IDs and sequences of hits
-# while IFS= read -r line; do
+# Get ID and sequence of seed
 echo $line_sub work/line_sub.txt
-seqtk subseq $proteomes/HsUniProt_nr.fasta work/line_sub.txt > $seeds/Hs_seeds.target.fasta
+seqtk subseq $proteomes/HsUniProt_nr.fasta work/line_sub.txt > $seeds/Hs_seed."$line_sub".fasta
 
 # blast seed to human proteome to expand targets
-blastp -query $seeds/Hs_seeds."$line_sub".fasta -db $proteomes/HsUniProt_nr.fasta -out $Hs_targets/"$line_sub".out -outfmt 6 -max_hsps 1 -evalue 1E-3 -num_threads 4
+blastp -query $seeds/Hs_seed."$line_sub".fasta -db $proteomes/HsUniProt_nr.fasta -out $Hs_targets/"$line_sub".out -outfmt 6 -max_hsps 1 -evalue 1E-3 -num_threads 4
 cat $Hs_targets/"$line_sub".out | awk '$3>30.000 && $11<1E-3 {print $2}' | sort | uniq > $Hs_targets/"$line_sub".list.txt
 seqtk subseq $proteomes/HsUniProt_nr.fasta $Hs_targets/"$line_sub".list.txt > $Hs_targets/"$line_sub".ext.fasta
 rm $Hs_targets/*.out
