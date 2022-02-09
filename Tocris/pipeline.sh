@@ -42,20 +42,15 @@ rm $proteomes/*.protein*.gz
 
 makeblastdb -in $proteomes/HsUniProt_nr.fasta -dbtype prot
 
-# set up directories and move files
+# set up directories
 cd work
 mkdir 1_Hs_seeds 2_Hs_targets alignments 3_Para_targets 4_Para_recip 5_Para_final
 
 seeds=work/1_Hs_seeds
-
 Hs_targets=work/2_Hs_targets
-
 alignments=work/alignments
-
 Para_targets=work/3_Para_targets
-
 Para_recip=work/4_Para_recip
-
 Para_final=work/5_Para_final
 
 # Get IDs and sequences of hits
