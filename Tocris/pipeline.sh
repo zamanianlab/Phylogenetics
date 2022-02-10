@@ -54,8 +54,8 @@ Para_recip=work/4_Para_recip
 Para_final=work/5_Para_final
 
 # Get ID and sequence of seed
-echo $line_sub work/line_sub.txt
-seqtk subseq $proteomes/HsUniProt_nr.fasta work/line_sub.txt > $seeds/Hs_seed."$line_sub".fasta
+echo $line_sub work/Hs_seeds.txt
+seqtk subseq $proteomes/HsUniProt_nr.fasta work/Hs_seeds.txt > $seeds/Hs_seed."$line_sub".fasta
 
 # blast seed to human proteome to expand targets
 blastp -query $seeds/Hs_seed."$line_sub".fasta -db $proteomes/HsUniProt_nr.fasta -out $Hs_targets/"$line_sub".out -outfmt 6 -max_hsps 1 -evalue 1E-3 -num_threads 4
@@ -90,3 +90,5 @@ while IFS= read -r paradb; do
     #tree-building
     iqtree-2.1.3-MacOSX/bin/iqtree2 -s $alignments/"$line_sub".combined_final.aln -nt 80 -alrt 1000 -bb 1000
 done < Phylogenetics/Tocris/parasite_db.list.txt
+
+mv $alignments output
