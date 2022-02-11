@@ -89,7 +89,7 @@ while IFS= read -r paradb; do
     touch $alignments/test2.txt
     rm $alignments/test1.txt
     #tree-building
-    iqtree-2.1.3-MacOSX/bin/iqtree2 -s $alignments/"$line_sub".combined_final.aln -nt 80 -alrt 1000 -bb 1000
+    iqtree-2.1.3-MacOSX/bin/iqtree2 -s $alignments/"$line_sub".combined_final.aln -nt 10 -alrt 1000 -bb 1000
 done < Phylogenetics/Tocris/parasite_db.list.txt
 
 mv $alignments output
