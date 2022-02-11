@@ -45,6 +45,7 @@ makeblastdb -in $proteomes/HsUniProt_nr.fasta -dbtype prot
 # set up directories
 cd work
 mkdir 1_Hs_seeds 2_Hs_targets alignments 3_Para_targets 4_Para_recip 5_Para_final
+cd ../
 
 seeds=work/1_Hs_seeds
 Hs_targets=work/2_Hs_targets
