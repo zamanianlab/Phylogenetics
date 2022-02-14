@@ -84,7 +84,7 @@ while IFS= read -r paradb; do
     trimal -gt 0.7 -in $alignments/"$line_sub".combined.aln -out $alignments/"$line_sub".combined_trim.aln
     trimal -resoverlap 0.70 -seqoverlap 70 -in $alignments/"$line_sub".combined_trim.aln -out $alignments/"$line_sub".combined_final.aln
     #tree-building
-    iqtree -s $alignments/"$line_sub".combined_final.aln -nt AUTO -alrt 1000 -bb 1000
+    iqtree -s $alignments/"$line_sub".combined_final.aln -nt AUTO -alrt 1000 -bb 1000 -redo -t PARS
 done < Phylogenetics/Tocris/parasite_db.list.txt
 
 mv $alignments output
