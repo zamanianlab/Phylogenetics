@@ -78,13 +78,14 @@ while IFS= read -r paradb; do
     grep -Ff $Hs_targets/"$line_sub".list.txt $Para_recip/"$line_sub"."$para_name".list.txt | awk '{print $1}' | sort | uniq > $Para_final/"$line_sub"."$para_name".list.txt
     seqtk subseq $proteomes/$paradb $Para_final/"$line_sub"."$para_name".list.txt > $Para_final/"$line_sub"."$para_name".fasta
     cat $Para_final/"$line_sub"."$para_name".fasta | sed 's/>/>'$para_name'|/g' >> $alignments/"$line_sub".combined.fasta
-    #align mafft
-    einsi --reorder --thread 2 $alignments/"$line_sub".combined.fasta > $alignments/"$line_sub".combined.aln
-    #trim
-    trimal -gt 0.7 -in $alignments/"$line_sub".combined.aln -out $alignments/"$line_sub".combined_trim.aln
-    trimal -resoverlap 0.70 -seqoverlap 70 -in $alignments/"$line_sub".combined_trim.aln -out $alignments/"$line_sub".combined_final.aln
-    #tree-building
-    iqtree -s $alignments/"$line_sub".combined_final.aln -nt AUTO -alrt 1000 -bb 1000 -redo -t PARS
 done < Phylogenetics/Tocris/parasite_db.list.txt
+
+#align mafft
+einsi --reorder --thread 2 $alignments/"$line_sub".combined.fasta > $alignments/"$line_sub".combined.aln
+#trim
+trimal -gt 0.7 -in $alignments/"$line_sub".combined.aln -out $alignments/"$line_sub".combined_trim.aln
+trimal -resoverlap 0.70 -seqoverlap 70 -in $alignments/"$line_sub".combined_trim.aln -out $alignments/"$line_sub".combined_final.aln
+#tree-building
+iqtree -s $alignments/"$line_sub".combined_final.aln -nt AUTO -alrt 1000 -bb 1000 -redo
 
 mv $alignments output
