@@ -77,7 +77,7 @@ while IFS= read -r paradb; do
     #compare to original human list to find surviving parasite targets
     grep -Ff $Hs_targets/"$line_sub".list.txt $Para_recip/"$line_sub"."$para_name".list.txt | awk '{print $1}' | sort | uniq > $Para_final/"$line_sub"."$para_name".list.txt
     seqtk subseq $proteomes/$paradb $Para_final/"$line_sub"."$para_name".list.txt > $Para_final/"$line_sub"."$para_name".fasta
-    cat $Para_final/"$line_sub"."$para_name".fasta | sed 's/>/>'$para_name'|/g' >> $alignments/"$line_sub".combined.fasta
+    cat $Para_final/"$line_sub"."$para_name".fasta | sed 's/>/>'$para_name'|/g' > $alignments/"$line_sub".combined.fasta
 done < Phylogenetics/Tocris/parasite_db.list.txt
 
 #align mafft
