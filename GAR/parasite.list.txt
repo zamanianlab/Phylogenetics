@@ -1,0 +1,7 @@
+ancylostoma_caninum/PRJNA72585
+ascaris_suum/PRJNA62057
+brugia_malayi/PRJNA10729
+caenorhabditis_elegans/PRJNA13758
+haemonchus_contortus/PRJEB506
+strongyloides_ratti/PRJEB125
+trichuris_muris/PRJEB126
