@@ -74,11 +74,11 @@ seqtk subseq $proteomes/caenorhabditis_elegans.PRJNA13758.WBPS16.protein.fa $Ce_
 while IFS= read -r paradb; do
     #blast expanded human targets against parasite dbs
     para_name=$(echo "$paradb" | awk 'BEGIN { FS = "." } ; { print $1 }')
-    blastp -query $Hs_targets/"$line_sub".ext.fasta -db $proteomes/$paradb -out $Para_targets/"$line_sub"."$para_name".out -outfmt "6 qseqid sseqid pident evalue qcovs" -max_hsps 1 -evalue 1E-1 -num_threads $threads
+    blastp -query $Ce_targets/"$line_sub".ext.fasta -db $proteomes/$paradb -out $Para_targets/"$line_sub"."$para_name".out -outfmt "6 qseqid sseqid pident evalue qcovs" -max_hsps 1 -evalue 1E-1 -num_threads $threads
 		cat $Para_targets/"$line_sub"."$para_name".out | awk '$3>30.000 && $4<1E-4 && $5>40.000 {print $2}' | sort | uniq > $Para_targets/"$line_sub"."$para_name".list.txt
 		seqtk subseq $proteomes/$paradb $Para_targets/"$line_sub"."$para_name".list.txt > $Para_targets/"$line_sub"."$para_name".fasta
     #blast parasite hits against human db
-    blastp -query $Para_targets/"$line_sub"."$para_name".fasta -db $proteomes/HsUniProt_nr.fasta -out $Para_recip/"$line_sub"."$para_name".out -outfmt "6 qseqid sseqid pident evalue qcovs" -max_hsps 1 -evalue 1E-3 -num_threads $threads
+    blastp -query $Para_targets/"$line_sub"."$para_name".fasta -db $proteomes/caenorhabditis_elegans.PRJNA13758.WBPS16.protein.fa -out $Para_recip/"$line_sub"."$para_name".out -outfmt "6 qseqid sseqid pident evalue qcovs" -max_hsps 1 -evalue 1E-3 -num_threads $threads
     cat $Para_recip/"$line_sub"."$para_name".out | awk '$3>30.000 && $4<1E-4 && $5>40.000 {print $1, $2}' | sort | uniq  > $Para_recip/"$line_sub"."$para_name".list.txt
     #compare to original human list to find surviving parasite targets
     grep -Ff $Hs_targets/"$line_sub".list.txt $Para_recip/"$line_sub"."$para_name".list.txt | awk '{print $1}' | sort | uniq > $Para_final/"$line_sub"."$para_name".list.txt
