@@ -42,16 +42,16 @@ makeblastdb -in $proteomes/HsUniProt_nr.fasta -dbtype prot
 
 # set up directories
 cd work
-mkdir 1_Ce_seeds 2_Ce_targets alignments 3_Para_targets 4_Para_recip 5_Para_final Hs_seeds
+mkdir Ce_seeds Ce_targets alignments Para_targets Para_recip Para_final Hs_seeds
 cd ../
 
-Ce_seeds=work/1_Ce_seeds
-Ce_targets=work/2_Ce_targets
-alignments=work/alignments
-Para_targets=work/3_Para_targets
-Para_recip=work/4_Para_recip
-Para_final=work/5_Para_final
+Ce_seeds=work/Ce_seeds
+Ce_targets=work/Ce_targets
+Para_targets=work/Para_targets
+Para_recip=work/Para_recip
+Para_final=work/Para_final
 Hs_seeds=work/Hs_seeds
+alignments=work/alignments
 threads=4
 
 line_sub=GAR
@@ -70,18 +70,20 @@ blastp -query $Ce_seeds/Ce_seed."$line_sub".fasta -db $proteomes/caenorhabditis_
 cat $Ce_targets/"$line_sub".out | awk '$3>30.000 && $4<1E-4 && $5>40.000 {print $2}' | sort | uniq > $Ce_targets/"$line_sub".list.txt
 seqtk subseq $proteomes/caenorhabditis_elegans.PRJNA13758.WBPS16.protein.fa $Ce_targets/"$line_sub".list.txt > $Ce_targets/"$line_sub".ext.fasta
 
-#cat $Ce_targets/"$line_sub".ext.fasta | sed 's/>/>Homo_sapiens|/g' > $alignments/"$line_sub".combined.fasta
+cat $Hs_seeds/"$line_sub".ext.fasta | sed 's/>/>Homo_sapiens|/g' > $alignments/"$line_sub".combined.fasta
+cat $Ce_targets/"$line_sub".ext.fasta | sed 's/>/>Caenorhabditis_elegans|/g' > $alignments/"$line_sub".combined.fasta
+
 while IFS= read -r paradb; do
-    #blast expanded human targets against parasite dbs
+    #blast expanded Ce targets against parasite dbs
     para_name=$(echo "$paradb" | awk 'BEGIN { FS = "." } ; { print $1 }')
     blastp -query $Ce_targets/"$line_sub".ext.fasta -db $proteomes/$paradb -out $Para_targets/"$line_sub"."$para_name".out -outfmt "6 qseqid sseqid pident evalue qcovs" -max_hsps 1 -evalue 1E-1 -num_threads $threads
 		cat $Para_targets/"$line_sub"."$para_name".out | awk '$3>30.000 && $4<1E-4 && $5>40.000 {print $2}' | sort | uniq > $Para_targets/"$line_sub"."$para_name".list.txt
 		seqtk subseq $proteomes/$paradb $Para_targets/"$line_sub"."$para_name".list.txt > $Para_targets/"$line_sub"."$para_name".fasta
-    #blast parasite hits against human db
+    #blast parasite hits against Ce db
     blastp -query $Para_targets/"$line_sub"."$para_name".fasta -db $proteomes/caenorhabditis_elegans.PRJNA13758.WBPS16.protein.fa -out $Para_recip/"$line_sub"."$para_name".out -outfmt "6 qseqid sseqid pident evalue qcovs" -max_hsps 1 -evalue 1E-3 -num_threads $threads
     cat $Para_recip/"$line_sub"."$para_name".out | awk '$3>30.000 && $4<1E-4 && $5>40.000 {print $1, $2}' | sort | uniq  > $Para_recip/"$line_sub"."$para_name".list.txt
-    #compare to original human list to find surviving parasite targets
-    grep -Ff $Hs_targets/"$line_sub".list.txt $Para_recip/"$line_sub"."$para_name".list.txt | awk '{print $1}' | sort | uniq > $Para_final/"$line_sub"."$para_name".list.txt
+    #compare to original Ce list to find surviving parasite targets
+    grep -Ff $C_targets/"$line_sub".list.txt $Para_recip/"$line_sub"."$para_name".list.txt | awk '{print $1}' | sort | uniq > $Para_final/"$line_sub"."$para_name".list.txt
     seqtk subseq $proteomes/$paradb $Para_final/"$line_sub"."$para_name".list.txt > $Para_final/"$line_sub"."$para_name".fasta
     cat $Para_final/"$line_sub"."$para_name".fasta | sed 's/>/>'$para_name'|/g' >> $alignments/"$line_sub".combined.fasta
 done < Phylogenetics/Tocris/parasite_db.list.txt
