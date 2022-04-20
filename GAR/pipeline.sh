@@ -1,17 +1,11 @@
 #!/bin/bash
 
+line_sub=$1
+
 wbp_prefix="ftp://ftp.ebi.ac.uk/pub/databases/wormbase/parasite/releases/current/species/"
 
 species=Phylogenetics/GAR/parasite.list.txt
 
-# -N: only download newer versions
-# -nc: no clobber; ignore server files that aren't newer than the local version
-# -r: recursive
-# -nH: don't mimick the server's directory structure
-# -cut-dirs=7: ignore everything from pub to species in the recursive search
-# --no-parent: don't ascend to the parent directory during a recursive search
-# -A: comma-separated list of names to accept
-# -P:
 
 # dowload parasite proteomes
 mkdir input/proteomes
@@ -54,8 +48,6 @@ Hs_seeds=work/Hs_seeds
 alignments=work/alignments
 threads=4
 
-line_sub=GAR
-
 
 # copy Ce and Hs list files (GAR seq ids)
 mv Phylogenetics/GAR/Ce_GARs.list.txt $Ce_seeds
@@ -65,13 +57,13 @@ mv Phylogenetics/GAR/Hs_GARs.list.txt $Hs_seeds
 seqtk subseq $proteomes/caenorhabditis_elegans.PRJNA13758.WBPS16.protein.fa $Ce_seeds/Ce_GARs.list.txt > $Ce_seeds/Ce_seed."$line_sub".fasta
 seqtk subseq $proteomes/HsUniProt_nr.fasta $Hs_seeds/Hs_GARs.list.txt > $Hs_seeds/Hs_seed."$line_sub".fasta
 
-# blast seed to Ce proteome to expand targets
+# blast Ce seed to Ce proteome to expand targets
 blastp -query $Ce_seeds/Ce_seed."$line_sub".fasta -db $proteomes/caenorhabditis_elegans.PRJNA13758.WBPS16.protein.fa -out $Ce_targets/"$line_sub".out -outfmt "6 qseqid sseqid pident evalue qcovs" -max_hsps 1 -evalue 1E-3 -num_threads $threads
 cat $Ce_targets/"$line_sub".out | awk '$3>30.000 && $4<1E-4 && $5>40.000 {print $2}' | sort | uniq > $Ce_targets/"$line_sub".list.txt
 seqtk subseq $proteomes/caenorhabditis_elegans.PRJNA13758.WBPS16.protein.fa $Ce_targets/"$line_sub".list.txt > $Ce_targets/"$line_sub".ext.fasta
 
 cat $Hs_seeds/"$line_sub".ext.fasta | sed 's/>/>Homo_sapiens|/g' > $alignments/"$line_sub".combined.fasta
-cat $Ce_targets/"$line_sub".ext.fasta | sed 's/>/>Caenorhabditis_elegans|/g' > $alignments/"$line_sub".combined.fasta
+cat $Ce_targets/"$line_sub".ext.fasta | sed 's/>/>Caenorhabditis_elegans|/g' >> $alignments/"$line_sub".combined.fasta
 
 while IFS= read -r paradb; do
     #blast expanded Ce targets against parasite dbs
@@ -86,7 +78,7 @@ while IFS= read -r paradb; do
     grep -Ff $C_targets/"$line_sub".list.txt $Para_recip/"$line_sub"."$para_name".list.txt | awk '{print $1}' | sort | uniq > $Para_final/"$line_sub"."$para_name".list.txt
     seqtk subseq $proteomes/$paradb $Para_final/"$line_sub"."$para_name".list.txt > $Para_final/"$line_sub"."$para_name".fasta
     cat $Para_final/"$line_sub"."$para_name".fasta | sed 's/>/>'$para_name'|/g' >> $alignments/"$line_sub".combined.fasta
-done < Phylogenetics/Tocris/parasite_db.list.txt
+done < Phylogenetics/GAR/parasite_db.list.txt
 
 #align mafft
 einsi --reorder --thread $threads $alignments/"$line_sub".combined.fasta > $alignments/"$line_sub".combined.aln
