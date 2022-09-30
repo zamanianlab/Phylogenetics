@@ -2,7 +2,7 @@
 
 line_sub=$1
 
-wbp_prefix="ftp://ftp.ebi.ac.uk/pub/databases/wormbase/parasite/releases/current/species/"
+wbp_prefix="ftp.ebi.ac.uk/pub/databases/wormbase/parasite/releases/current/species/"
 
 species=Phylogenetics/BAR/parasite.list.txt
 
