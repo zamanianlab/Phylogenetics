@@ -54,7 +54,7 @@ mv Phylogenetics/BioLGIC/Ce_BLGIC.list.txt $Ce_seeds
 mv Phylogenetics/BioLGIC/Hs_BARs.list.txt $Hs_seeds
 
 # get sequences of seeds
-seqtk subseq $proteomes/caenorhabditis_elegans.PRJNA13758.WBPS17.protein.fa $Ce_seeds/Ce_Ce_BLGIC.list.txt > $Ce_seeds/Ce_seed."$line_sub".fasta
+seqtk subseq $proteomes/caenorhabditis_elegans.PRJNA13758.WBPS17.protein.fa $Ce_seeds/Ce_BLGIC.list.txt > $Ce_seeds/Ce_seed."$line_sub".fasta
 seqtk subseq $proteomes/HsUniProt_nr.fasta $Hs_seeds/Hs_BARs.list.txt > $Hs_seeds/Hs_seed."$line_sub".fasta
 
 # blast Ce seed to Ce proteome to expand targets
