@@ -18,8 +18,6 @@ do
   wget -nc -r -nH --cut-dirs=10 --no-parent --reject="index.html*" -A 'protein.fa.gz' $species_dl -P $proteomes
 done <"$species"
 
-# add human proteome
-mv Phylogenetics/BioLGIC/HsUniProt_nr.fasta $proteomes
 
 # make blast databases
 while IFS= read -r line
@@ -31,12 +29,11 @@ do
 done <"$species"
 rm $proteomes/*.protein*.gz
 
-makeblastdb -in $proteomes/HsUniProt_nr.fasta -dbtype prot
 
 
 # set up directories
 cd work
-mkdir Ce_seeds Ce_targets alignments Para_targets Para_recip Para_final Hs_seeds
+mkdir Ce_seeds Ce_targets alignments Para_targets Para_recip Para_final
 cd ../
 
 Ce_seeds=work/Ce_seeds
@@ -44,18 +41,17 @@ Ce_targets=work/Ce_targets
 Para_targets=work/Para_targets
 Para_recip=work/Para_recip
 Para_final=work/Para_final
-Hs_seeds=work/Hs_seeds
 alignments=work/alignments
 threads=4
 
 
-# copy Ce and Hs list files (Biogenic amine LGIC seq ids)
+# copy Ce list files (Biogenic amine LGIC seq ids)
 mv Phylogenetics/BioLGIC/Ce_BLGIC.list.txt $Ce_seeds
-mv Phylogenetics/BioLGIC/Hs_BARs.list.txt $Hs_seeds
+
 
 # get sequences of seeds
 seqtk subseq $proteomes/caenorhabditis_elegans.PRJNA13758.WBPS17.protein.fa $Ce_seeds/Ce_BLGIC.list.txt > $Ce_seeds/Ce_seed."$line_sub".fasta
-seqtk subseq $proteomes/HsUniProt_nr.fasta $Hs_seeds/Hs_BARs.list.txt > $Hs_seeds/Hs_seed."$line_sub".fasta
+
 
 # blast Ce seed to Ce proteome to expand targets
 blastp -query $Ce_seeds/Ce_seed."$line_sub".fasta -db $proteomes/caenorhabditis_elegans.PRJNA13758.WBPS17.protein.fa -out $Ce_targets/"$line_sub".out -outfmt "6 qseqid sseqid pident evalue qcovs" -max_hsps 1 -evalue 1E-3 -num_threads $threads
@@ -63,7 +59,6 @@ cat $Ce_targets/"$line_sub".out | awk '$3>30.000 && $4<1E-4 && $5>40.000 {print 
 seqtk subseq $proteomes/caenorhabditis_elegans.PRJNA13758.WBPS17.protein.fa $Ce_targets/"$line_sub".list.txt > $Ce_targets/"$line_sub".ext.fasta
 
 cat $Ce_targets/"$line_sub".ext.fasta | sed 's/>/>caenorhabditis_elegans|/g' > $alignments/"$line_sub".combined.fasta
-cat $Hs_seeds/Hs_seed."$line_sub".fasta | sed 's/>/>Homo_sapiens|/g' >> $alignments/"$line_sub".combined.fasta
 
 while IFS= read -r paradb; do
     #blast expanded Ce targets against parasite dbs
