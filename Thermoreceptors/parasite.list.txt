@@ -1,0 +1,4 @@
+brugia_malayi/PRJNA10729
+brugia_pahangi/PRJEB497
+strongyloides_ratti/PRJEB125
+caenorhabditis_elegans/PRJNA13758
