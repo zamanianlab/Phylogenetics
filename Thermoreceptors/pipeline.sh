@@ -54,7 +54,7 @@ mv Phylogenetics/Thermoreceptors/Ce_Thermoreceptors.list.txt $Ce_seeds
 mv Phylogenetics/Thermoreceptors/Hs_Thermoreceptors.list.txt $Hs_seeds
 
 # get sequences of seeds
-seqtk subseq $proteomes/caenorhabditis_elegans.PRJNA13758.WBPS18.protein.fa $Ce_seeds/Ce_Thermoreceptorss.list.txt > $Ce_seeds/Ce_seed."$line_sub".fasta
+seqtk subseq $proteomes/caenorhabditis_elegans.PRJNA13758.WBPS18.protein.fa $Ce_seeds/Ce_Thermoreceptors.list.txt > $Ce_seeds/Ce_seed."$line_sub".fasta
 seqtk subseq $proteomes/HsUniProt_nr.fasta $Hs_seeds/Hs_Thermoreceptors.list.txt > $Hs_seeds/Hs_seed."$line_sub".fasta
 
 # blast Ce seed to Ce proteome to expand targets
