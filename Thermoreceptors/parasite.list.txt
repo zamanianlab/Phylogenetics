@@ -1,4 +1,8 @@
-brugia_malayi/PRJNA10729
 brugia_pahangi/PRJEB497
+brugia_malayi/PRJNA10729
 strongyloides_ratti/PRJEB125
 caenorhabditis_elegans/PRJNA13758
+ascaris_suum/PRJNA62057
+ancylostoma_caninum/PRJNA72585
+dirofilaria_immitis/PRJEB1797
+trichuris_muris/PRJEB126
