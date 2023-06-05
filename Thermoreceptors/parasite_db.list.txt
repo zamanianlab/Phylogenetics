@@ -2,10 +2,6 @@ brugia_malayi.PRJNA10729.WBPS18.protein.fa
 caenorhabditis_elegans.PRJNA13758.WBPS18.protein.fa
 strongyloides_ratti.PRJEB125.WBPS18.protein.fa
 brugia_pahangi.PRJEB497.WBPS18.protein.fa
-brugia_pahangi.PRJEB497.WBPS18.protein.fa
-brugia_malayi.PRJNA10729.WBPS18.protein.fa
-strongyloides_ratti.PRJEB125.WBPS18.protein.fa
-caenorhabditis_elegans.PRJNA13758.WBPS18.protein.fa
 ascaris_suum.PRJNA62057.WBPS18.protein.fa
 ancylostoma_caninum.PRJNA72585.WBPS18.protein.fa
 dirofilaria_immitis.PRJEB1797.WBPS18.protein.fa
