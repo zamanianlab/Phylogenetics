@@ -62,7 +62,7 @@ blastp -query $Ce_seeds/Ce_seed."$line_sub".fasta -db $proteomes/caenorhabditis_
 cat $Ce_targets/"$line_sub".out | awk '$3>20.000 && $4<1E-4 && $5>30.000 {print $2}' | sort | uniq > $Ce_targets/"$line_sub".list.txt
 seqtk subseq $proteomes/caenorhabditis_elegans.PRJNA13758.WBPS18.protein.fa $Ce_targets/"$line_sub".list.txt > $Ce_targets/"$line_sub".ext.fasta
 
-cat $Ce_targets/"$line_sub".ext.fasta | sed 's/>/>Caenorhabditis_elegans|/g' > $alignments/"$line_sub".combined.fasta
+#cat $Ce_targets/"$line_sub".ext.fasta | sed 's/>/>Caenorhabditis_elegans|/g' > $alignments/"$line_sub".combined.fasta
 cat $Hs_seeds/Hs_seed."$line_sub".fasta | sed 's/>/>Homo_sapiens|/g' >> $alignments/"$line_sub".combined.fasta
 
 while IFS= read -r paradb; do
