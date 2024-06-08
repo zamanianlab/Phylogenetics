@@ -40,7 +40,6 @@ Ce_targets=work/Ce_targets
 Para_targets=work/Para_targets
 Para_recip=work/Para_recip
 Para_final=work/Para_final
-Hs_seeds=work/Hs_seeds
 alignments=work/alignments
 threads=4
 
