@@ -1,0 +1,11 @@
+ancylostoma_caninum/PRJNA72585
+ancylostoma_ceylanicum/PRJNA231479
+ancylostoma_ceylanicum/PRJNA72583
+ancylostoma_duodenale/PRJNA72581
+necator_americanus/PRJNA1007425
+necator_americanus/PRJNA72135
+ascaris_suum/PRJNA62057
+brugia_malayi/PRJNA10729
+caenorhabditis_elegans/PRJNA13758
+haemonchus_contortus/PRJEB506
+trichuris_muris/PRJEB126
