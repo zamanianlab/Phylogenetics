@@ -54,13 +54,13 @@ mv Phylogenetics/BAR/Ce_BARs.list.txt $Ce_seeds
 mv Phylogenetics/BAR/Hs_BARs.list.txt $Hs_seeds
 
 # get sequences of seeds
-seqtk subseq $proteomes/caenorhabditis_elegans.PRJNA13758.WBPS18.protein.fa $Ce_seeds/Ce_BARs.list.txt > $Ce_seeds/Ce_seed."$line_sub".fasta
+seqtk subseq $proteomes/caenorhabditis_elegans.PRJNA13758.WBPS19.protein.fa $Ce_seeds/Ce_BARs.list.txt > $Ce_seeds/Ce_seed."$line_sub".fasta
 seqtk subseq $proteomes/HsUniProt_nr.fasta $Hs_seeds/Hs_BARs.list.txt > $Hs_seeds/Hs_seed."$line_sub".fasta
 
 # blast Ce seed to Ce proteome to expand targets
-blastp -query $Ce_seeds/Ce_seed."$line_sub".fasta -db $proteomes/caenorhabditis_elegans.PRJNA13758.WBPS18.protein.fa -out $Ce_targets/"$line_sub".out -outfmt "6 qseqid sseqid pident evalue qcovs" -max_hsps 1 -evalue 1E-3 -num_threads $threads
+blastp -query $Ce_seeds/Ce_seed."$line_sub".fasta -db $proteomes/caenorhabditis_elegans.PRJNA13758.WBPS19.protein.fa -out $Ce_targets/"$line_sub".out -outfmt "6 qseqid sseqid pident evalue qcovs" -max_hsps 1 -evalue 1E-3 -num_threads $threads
 cat $Ce_targets/"$line_sub".out | awk '$3>20.000 && $4<1E-4 && $5>30.000 {print $2}' | sort | uniq > $Ce_targets/"$line_sub".list.txt
-seqtk subseq $proteomes/caenorhabditis_elegans.PRJNA13758.WBPS18.protein.fa $Ce_targets/"$line_sub".list.txt > $Ce_targets/"$line_sub".ext.fasta
+seqtk subseq $proteomes/caenorhabditis_elegans.PRJNA13758.WBPS19.protein.fa $Ce_targets/"$line_sub".list.txt > $Ce_targets/"$line_sub".ext.fasta
 
 #cat $Ce_targets/"$line_sub".ext.fasta | sed 's/>/>Caenorhabditis_elegans|/g' > $alignments/"$line_sub".combined.fasta
 cat $Hs_seeds/Hs_seed."$line_sub".fasta | sed 's/>/>Homo_sapiens|/g' >> $alignments/"$line_sub".combined.fasta
@@ -72,7 +72,7 @@ while IFS= read -r paradb; do
     cat $Para_targets/"$line_sub"."$para_name".out | awk '$3>20.000 && $4<1E-4 && $5>30.000 {print $2}'  | sort | uniq > $Para_targets/"$line_sub"."$para_name".list.txt
     seqtk subseq $proteomes/$paradb $Para_targets/"$line_sub"."$para_name".list.txt > $Para_targets/"$line_sub"."$para_name".fasta
     #blast parasite hits against Ce db
-    blastp -query $Para_targets/"$line_sub"."$para_name".fasta -db $proteomes/caenorhabditis_elegans.PRJNA13758.WBPS18.protein.fa -out $Para_recip/"$line_sub"."$para_name".out -outfmt "6 qseqid sseqid pident evalue qcovs" -max_hsps 1 -evalue 1E-3 -num_threads $threads
+    blastp -query $Para_targets/"$line_sub"."$para_name".fasta -db $proteomes/caenorhabditis_elegans.PRJNA13758.WBPS19.protein.fa -out $Para_recip/"$line_sub"."$para_name".out -outfmt "6 qseqid sseqid pident evalue qcovs" -max_hsps 1 -evalue 1E-3 -num_threads $threads
     cat $Para_recip/"$line_sub"."$para_name".out | awk '$3>20.000 && $4<1E-4 && $5>30.000 {print $1, $2}' | sort | uniq  > $Para_recip/"$line_sub"."$para_name".list.txt
     #compare to original Ce list to find surviving parasite targets
     grep -Ff $Ce_targets/"$line_sub".list.txt $Para_recip/"$line_sub"."$para_name".list.txt | awk '{print $1}' | sort | uniq > $Para_final/"$line_sub"."$para_name".list.txt
